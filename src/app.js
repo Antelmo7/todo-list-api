@@ -2,6 +2,8 @@ import express from 'express';
 import { rateLimit } from 'express-rate-limit';
 import cors from 'cors';
 import logger from './middlewares/logger.js';
+import errorHandler from './middlewares/errorHandler.js';
+import routes from './routes/index.js';
 
 const app = express();
 app.use(express.json());
@@ -20,5 +22,9 @@ app.use(limiter);
 app.get('/', (req, res) => {
   res.send('Todo List API');
 });
+
+app.use('/api', routes);
+
+app.use(errorHandler);
 
 export default app;
