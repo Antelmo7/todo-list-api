@@ -1,0 +1,26 @@
+{
+  "name": "todo-list-api",
+  "version": "1.0.0",
+  "description": "RESTful API to allow users to manage their to-do list.",
+  "homepage": "https://github.com/Antelmo7/todo-list-api#readme",
+  "bugs": {
+    "url": "https://github.com/Antelmo7/todo-list-api/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Antelmo7/todo-list-api.git"
+  },
+  "license": "MIT",
+  "author": "Antelmo Verdugo",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "node --env-file .env --watch ./src/server.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "express-rate-limit": "^8.2.1"
+  }
+}
