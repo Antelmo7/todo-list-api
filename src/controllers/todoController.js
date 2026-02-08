@@ -3,6 +3,7 @@ import validateTodo from "../utils/validateTodo.js";
 
 export async function create(req, res) {
   const body = req.body;
+  const { userId } = req.user;
 
   if (!validateTodo(body)) {
     const error = new Error('Missing fields');
@@ -11,16 +12,17 @@ export async function create(req, res) {
     throw error;
   }
 
-  const newTodo = await todoService.create(body);
+  const newTodo = await todoService.create(body, userId);
 
   res.status(201).json(newTodo);
 }
 
 export async function update(req, res) {
   const { todoId } = req.params;
+  const { userId } = req.user;
   const body = req.body;
 
-  const updatedTodo = await todoService.update(todoId, body);
+  const updatedTodo = await todoService.update(todoId, userId, body);
 
   res.status(201).json(updatedTodo);
 }

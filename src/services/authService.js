@@ -26,7 +26,7 @@ export async function register({
     const newUser = res.rows[0];
 
     const payload = {
-      userId: newUser.userId
+      userId: newUser.userid
     }
 
     const token = jwt.sign(
@@ -75,7 +75,7 @@ export async function login({
     }
 
     const payload = {
-      userId: user.userId
+      userId: user.userid
     }
 
     const token = jwt.sign(
