@@ -40,8 +40,9 @@ export async function deleteTodo(req, res) {
 
 export async function getTodos(req, res) {
   const { userId } = req.user;
+  const { limit, page } = req.query;
 
-  const todos = await todoService.getTodos(userId);
+  const todos = await todoService.getTodos(userId, parseInt(limit), parseInt(page));
 
   res.status(200).json(todos);
 }

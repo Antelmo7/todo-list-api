@@ -79,12 +79,22 @@ export async function deleteTodo(todoId, userId) {
   await client.query(text, values);
 }
 
-export async function getTodos(userId) {
-  const text = `SELECT * FROM todos WHERE userId = $1`;
-  const res = await client.query(text, [userId]);
+export async function getTodos(userId, limit = 10, page = 1) {
+  const offset = (page - 1) * limit; // items to skip
+
+  const text = `SELECT * FROM todos WHERE userId = $1 LIMIT $2 OFFSET $3`;
+  const res = await client.query(text, [userId, limit, offset]);
+
+  const countText = `SELECT * FROM todos WHERE userId = $1`;
+  const countRes = await client.query(countText, [userId]);
 
   const todos = res.rows;
+  const totalPages = Math.ceil(countRes.rowCount / limit); // nearest max number
   return {
-    data: todos
+    data: todos,
+    page,
+    pageItems: res.rowCount,
+    totalItems: countRes.rowCount,
+    totalPages
   };
 }
