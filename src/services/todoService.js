@@ -85,16 +85,18 @@ export async function getTodos(userId, limit = 10, page = 1) {
   const text = `SELECT * FROM todos WHERE userId = $1 LIMIT $2 OFFSET $3`;
   const res = await client.query(text, [userId, limit, offset]);
 
-  const countText = `SELECT * FROM todos WHERE userId = $1`;
+  const countText = `SELECT count(*) FROM todos WHERE userId = $1`;
   const countRes = await client.query(countText, [userId]);
 
   const todos = res.rows;
-  const totalPages = Math.ceil(countRes.rowCount / limit); // nearest max number
+  const totalItems = parseInt(countRes.rows[0].count);
+  const totalPages = Math.ceil(totalItems / limit); // nearest max number
+
   return {
     data: todos,
     page,
     pageItems: res.rowCount,
-    totalItems: countRes.rowCount,
+    totalItems,
     totalPages
   };
 }
