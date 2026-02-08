@@ -13,13 +13,14 @@ const client = new Client({
 await client.connect();
 
 export async function register({
-  username,
+  name,
+  email,
   password
 }) {
   try {
     const passHash = await bcrypt.hash(password, 10);
-    const text = `INSERT INTO users(username, password) VALUES ($1, $2) RETURNING *`;
-    const values = [username, passHash];
+    const text = `INSERT INTO users(name, email, password) VALUES ($1, $2, $3) RETURNING *`;
+    const values = [name, email, passHash];
 
     const res = await client.query(text, values);
     const newUser = res.rows[0];
@@ -48,12 +49,12 @@ export async function register({
 }
 
 export async function login({
-  username,
+  email,
   password
 }) {
   try {
-    const text = `SELECT * FROM USERS WHERE username = $1`;
-    const values = [username];
+    const text = `SELECT * FROM USERS WHERE email = $1`;
+    const values = [email];
 
     const res = await client.query(text, values);
     const user = res.rows[0];
