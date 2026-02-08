@@ -53,3 +53,38 @@ export async function update(todoId, userId, {
 
   return data;
 }
+
+export async function deleteTodo(todoId, userId) {
+  const queryToValidate = `SELECT * FROM todos WHERE todoId = $1`;
+  const resToValidate = await client.query(queryToValidate, [todoId]);
+  const todoToValidate = resToValidate.rows[0];
+
+  if (resToValidate.rowCount === 0) {
+    const error = new Error('Todo not found');
+    error.statusCode = 404;
+
+    throw error;
+  }
+
+  if (!(todoToValidate.userid === userId)) {
+    const error = new Error('Forbidden');
+    error.statusCode = 403;
+
+    throw error;
+  }
+
+  const text = `DELETE FROM todos WHERE todoId = $1`;
+  const values = [todoId];
+
+  await client.query(text, values);
+}
+
+export async function getTodos(userId) {
+  const text = `SELECT * FROM todos WHERE userId = $1`;
+  const res = await client.query(text, [userId]);
+
+  const todos = res.rows;
+  return {
+    data: todos
+  };
+}

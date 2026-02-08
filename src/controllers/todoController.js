@@ -26,3 +26,22 @@ export async function update(req, res) {
 
   res.status(201).json(updatedTodo);
 }
+
+export async function deleteTodo(req, res) {
+  const { todoId } = req.params;
+  const { userId } = req.user;
+
+  await todoService.deleteTodo(todoId, userId);
+
+  res.status(204).json({
+    message: `Post with ID: ${todoId} deleted successfully`
+  });
+}
+
+export async function getTodos(req, res) {
+  const { userId } = req.user;
+
+  const todos = await todoService.getTodos(userId);
+
+  res.status(200).json(todos);
+}
